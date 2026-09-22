@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineTimber | Catálogo de Filmes e Sessões</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header / Barra de Navegação -->
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <span class="brand-icon">🎬</span>
+        <div>
+          <h1 class="brand-title">CINE<span>TIMBER</span></h1>
+          <p class="brand-subtitle">Gestão de Salas & Sessões de Cinema</p>
+        </div>
+      </div>
+
+      <div class="header-status">
+        <div class="api-status-badge" id="apiStatusBadge">
+          <span class="status-dot"></span>
+          <span id="apiStatusText">Verificando API...</span>
+        </div>
+        <button class="btn-icon" id="btnSettings" title="Configurar URL da API">⚙️</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Modal de Configuração de API -->
+  <div class="modal-overlay hidden" id="settingsModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Configuração de Conexão da API</h3>
+        <button class="btn-close" id="btnCloseSettings">&times;</button>
+      </div>
+      <div class="modal-body">
+        <label for="apiUrlInput">URL Base da API Backend:</label>
+        <input type="text" id="apiUrlInput" placeholder="http://localhost:3000/api">
+        <p class="helper-text">Padrão local: <code>http://localhost:3000/api</code> ou na Vercel: <code>/api</code></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btnResetApi">Restaurar Padrão</button>
+        <button class="btn btn-primary" id="btnSaveApi">Salvar e Recarregar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero & Indicadores Rápidos -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <span class="hero-tag">PROGRAMAÇÃO EM CARTAZ</span>
+        <h2>Experiência Cinematográfica Premium</h2>
+        <p>Consulte os horários, salas IMAX, VIP e Dolby Atmos com disponibilidade de assentos em tempo real.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-number" id="statFilmes">-</span>
+          <span class="stat-label">Filmes em Exibição</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="statSessoes">-</span>
+          <span class="stat-label">Sessões Agendadas</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="statSalas">-</span>
+          <span class="stat-label">Salas Ativas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Barra de Filtros e Busca -->
+  <section class="filters-section">
+    <div class="container filters-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Pesquisar filme por título...">
+      </div>
+
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label for="dateFilter">📅 Data:</label>
+          <select id="dateFilter">
+            <option value="all">Todas as Datas</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="roomFilter">🚪 Sala:</label>
+          <select id="roomFilter">
+            <option value="all">Todas as Salas</option>
+          </select>
+        </div>
+
+        <button class="btn btn-secondary btn-refresh" id="btnRefresh" title="Atualizar dados">
+          🔄 Atualizar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conteúdo Principal / Catálogo -->
+  <main class="container main-content">
+    <!-- Estado de Carregamento -->
+    <div class="loading-state" id="loadingState">
+      <div class="spinner"></div>
+      <p>Carregando filmes e sessões do cinema...</p>
+    </div>
+
+    <!-- Estado de Erro -->
+    <div class="error-state hidden" id="errorState">
+      <span class="error-icon">⚠️</span>
+      <h3 id="errorMessageTitle">Falha ao Conectar com a API</h3>
+      <p id="errorMessageDesc">Certifique-se de que o backend está rodando em http://localhost:3000.</p>
+      <button class="btn btn-primary" id="btnRetry">Tentar Novamente</button>
+    </div>
+
+    <!-- Estado Vazio -->
+    <div class="empty-state hidden" id="emptyState">
+      <span class="empty-icon">🎞️</span>
+      <h3>Nenhum Filme ou Sessão Encontrada</h3>
+      <p>Tente ajustar os filtros de busca, data ou sala para ver outras opções.</p>
+      <button class="btn btn-secondary" id="btnClearFilters">Limpar Filtros</button>
+    </div>
+
+    <!-- Grid do Catálogo de Filmes -->
+    <div class="movies-grid" id="moviesGrid">
+      <!-- Inserido dinamicamente via app.js -->
+    </div>
+  </main>
+
+  <!-- Modal de Reserva de Ingresso / Simulação -->
+  <div class="modal-overlay hidden" id="ticketModal">
+    <div class="modal-box modal-ticket">
+      <div class="modal-header">
+        <h3 id="ticketModalTitle">🎟️ Reservar Ingresso</h3>
+        <button class="btn-close" id="btnCloseTicket">&times;</button>
+      </div>
+      <div class="modal-body" id="ticketModalBody">
+        <!-- Preenchido via app.js -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btnCancelTicket">Cancelar</button>
+        <button class="btn btn-primary btn-confirm" id="btnConfirmTicket">Confirmar Reserva</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Rodapé -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <p><strong>CineTimber</strong> &bull; Mini Sistema de Gerenciamento de Cinema</p>
+      <p class="footer-sub">Desenvolvido com Node.js, Express, Supabase (PostgreSQL) e Vanilla JS.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
