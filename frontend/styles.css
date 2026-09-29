@@ -62,7 +62,7 @@ body {
   background-color: var(--blue-950);
   background-image: 
     radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 85% 20%, rgba(239, 68, 68, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 40%),
     radial-gradient(circle at 50% 80%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
   background-attachment: fixed;
   color: var(--text-main);
@@ -156,9 +156,9 @@ body {
   line-height: 1.1;
 }
 
-.brand-red {
-  color: var(--red-500);
-  text-shadow: 0 0 12px var(--red-glow);
+.brand-white {
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
 }
 
 .brand-subtitle {
